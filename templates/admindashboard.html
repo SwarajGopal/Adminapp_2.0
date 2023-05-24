@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Admin Dashboard</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/addash.css')  }}">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+	<script src="https://kit.fontawesome.com/742298f6f6.js" crossorigin="anonymous"></script>
+	
+	    <style>
+        .container34 {
+            display: flex;
+            height: 100%;
+        }
+    
+        .sidebar {
+			margin-left: 0;
+            background-color: #dfdfdf;
+            width: 250px;
+            padding: 20px;
+            overflow-y: auto;
+            animation: slide-in 0.5s ease-out; /* Add slide-in animation */
+        }
+    
+        .sidebar h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-family: Arial, sans-serif; /* Use Google Meet font */
+            color: #31353a; /* Set text color */
+            font-size: 20px; /* Set font size */
+        }
+    
+        .notification {
+            background-color: #ffffff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px; /* Add border-radius for rounded corners */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add box-shadow for depth effect */
+        }
+    
+        .notification p {
+            margin: 0;
+            color: #3c4043; /* Set text color */
+            font-family: Arial, sans-serif; /* Use Google Meet font */
+            font-size: 14px; /* Set font size */
+        }
+    
+
+        
+    
+    </style>
+
+</head>
+<body>
+	<header>
+		<nav>
+			<div class="logo-container">
+				<div class="logo">
+					<img src="{{ url_for('static',filename='css/user2.png') }}" alt="Logo">
+				</div>
+				<h1 class="dashboard-title">Admin</h1>
+			</div>
+			<ul class="nav-links">
+				<li><a href="#" class="active"><i class="fas fa-home"></i> Home</a></li>
+			</ul>
+			<a href="#" onclick="window.location.href='{{ url_for('index') }}'" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+		</nav>
+	</header>
+	<section>
+		<div class="container34">
+			<div class="sidebar">
+				<h3>Notifications</h3>
+				<!-- The warning message will be dynamically added here -->
+			</div>
+			
+			
+	 </div>
+		<main>
+			<div class="tab">
+				<button class="tablinks active" onclick="openCity(event, 'Exam')"><i class="fas fa-book"></i> Exam</button>
+				<button class="tablinks" onclick="openCity(event, 'ScreenMonitoring')"><i class="fas fa-desktop"></i> Screen Monitoring</button>
+			</div>
+			<div id="Exam" class="tabcontent active">
+				<h3></h3>
+				<div class="container2">
+					<h2>Admin Exam Interface</h2>
+					<form id="examForm">
+						<div class="form-group">
+							<label for="question1">Question 1:</label>
+							<input type="text" id="question1" required>
+						</div>
+						<div class="form-group">
+							<label for="question2">Question 2:</label>
+							<input type="text" id="question2" >
+						</div>
+						<div class="form-group">
+							<label for="question3">Question 3:</label>
+							<input type="text" id="question3">
+						</div>
+						<div class="form-group">
+							<label for="question4">Question 4:</label>
+							<input type="text" id="question4">
+						</div>
+						<!-- Add more question groups as needed -->
+						<button type="button" class="submit-btn" onclick="submitQuestions()">Submit questions</button>
+					</form>
+					
+				</div>
+			</div>
+			<div id="ScreenMonitoring" class="tabcontent">
+				<h3>Screen Monitoring</h3>
+				<p>Client: {{ client_name }}</p>
+				<img src="{{ url_for('video_feed') }}" width="400" height="300" />
+				<p>Server IP: {{ host }}</p>
+				<p>Server Port: {{ port }}</p>			
+					
+			</div>
+		</main>
+		<div id="wrapper">
+			<div id="chatbox"></div>
+			<form name="message" id="message-form">
+				<input name="usermsg" type="text" id="usermsg" placeholder="Type your message..." />
+				<button type="submit" id="submitmsg"><i class="fas fa-paper-plane"></i></button>
+			</form>
+		</div>
+	</section>
+	
+	
+	
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script type="text/javascript"  src="{{ url_for('static',filename='script/admindash.js')  }}"></script>
+
+
+</body>
+</html>

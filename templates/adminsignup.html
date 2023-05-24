@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>PROCTOR</title>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/adminsignup.css') }}">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://kit.fontawesome.com/742298f6f6.js" crossorigin="anonymous"></script>
+</head>
+<body>
+	<header>
+		<h1>Admin Sign Up</h1>
+	</header>
+
+	<div class="signup">
+        <form>
+            <label for="staffname">Name:</label>
+            <input type="text" id="staffname" name="staffname" required>
+
+            <label for="staffid">Staff ID:</label>
+            <input type="text" id="staffid" name="staffid">
+    
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+    
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+    
+            <label for="confirm-password">Confirm Password:</label>
+            <input type="password" id="confirm-password" name="confirm-password" required>
+    
+            <button type="button" id="submit">Submit</button>
+        </form>
+        <div class="login">
+            <a href="./adminlogin.html">login</a>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-app.js";
+        import { getDatabase, set, ref } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-database.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-auth.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyB_jLJFUB1L7C8n8-9PHu8sbmxyPoKIr5k",
+          authDomain: "proctor-watch.firebaseapp.com",
+          databaseURL: "https://proctor-watch-default-rtdb.firebaseio.com",
+          projectId: "proctor-watch",
+          storageBucket: "proctor-watch.appspot.com",
+          messagingSenderId: "375719442930",
+          appId: "1:375719442930:web:51fb94434165515540d36b"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const auth = getAuth();
+
+        const submitBtn = document.getElementById('submit');
+
+        submitBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+            var staffname = document.getElementById('staffname').value;
+            var staffid = document.getElementById('staffid').value;
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Signed in 
+                    const user = userCredential.user;
+
+                    set(ref(database,'user/' +user.uid),{
+
+                      staffname: staffname,
+                      staffid: staffid,
+                      email: email
+        
+
+                    })
+                    alert('user created!');
+                    // ...
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    alert(errorMessage);
+                });
+        });
+
+
+      </script>
+</body>
+</html>
