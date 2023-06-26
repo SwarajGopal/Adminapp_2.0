@@ -111,9 +111,16 @@ def adminsignup():
     return render_template('adminsignup.html')
 
 
-@app.route('/admondashboard')
+@app.route('/admindashboard')
 def admindashboard():
-    return render_template('admindashboard.html', host=HOST, port=PORT)
+    clients = [
+        {'id': 1, 'name': 'PC 1'},
+        {'id': 2, 'name': 'PC 2'}, 
+        {'id': 3, 'name': 'PC 3'},
+         {'id': 4, 'name': 'PC 4'}
+    ]  # Replace with your actual list of client objects
+
+    return render_template('admindashboard.html', host=HOST, port=PORT, clients=clients)
 
 
 if __name__ == '__main__':

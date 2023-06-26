@@ -63,44 +63,69 @@ var firebaseConfig = {
 };
 
 // Initialize Firebase
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database().ref();
 
 // Function to retrieve and display all warning messages from Realtime Database
 function displayWarningMessages() {
+  const sidebar = document.querySelector(".sidebar");
+  if (!sidebar) {
+    console.log("Sidebar element not found.");
+    return;
+  }
+
   db.child("warnings").on("value", (snapshot) => {
     const warnings = snapshot.val();
-    const sidebar = document.querySelector(".sidebar");
     sidebar.innerHTML = ""; // Clear the sidebar before updating with new warnings
 
-    for (const key in warnings) {
-      if (warnings.hasOwnProperty(key)) {
-        const message = warnings[key].message;
-        const timestamp = warnings[key].timestamp;
+    for (const [key, warning] of Object.entries(warnings)) {
+      const { message, timestamp } = warning;
 
-        const warningMessageElement = document.createElement("div");
-        warningMessageElement.classList.add("notification", "warning");
+      const warningMessageElement = document.createElement("div");
+      warningMessageElement.classList.add("notification", "warning");
 
-        const messageElement = document.createElement("p");
-        messageElement.innerText = "Alert: " + message;
-        warningMessageElement.appendChild(messageElement);
+      const messageElement = document.createElement("p");
+      messageElement.innerText = "Alert: " + message;
+      warningMessageElement.appendChild(messageElement);
 
-        const timestampElement = document.createElement("p");
-        timestampElement.innerText = "Time: " + timestamp;
-        warningMessageElement.appendChild(timestampElement);
+      const timestampElement = document.createElement("p");
+      timestampElement.innerText = "Time: " + timestamp;
+      warningMessageElement.appendChild(timestampElement);
 
-        sidebar.appendChild(warningMessageElement);
-      }
+      sidebar.appendChild(warningMessageElement);
     }
   }, (error) => {
-    console.log("Error getting warning messages: ", error);
+    console.log("Error getting warning messages:", error);
+  });
+
+  db.child("USBnotifications").on("value", (snapshot) => {
+    const usbNotifications = snapshot.val();
+
+    for (const [key, notification] of Object.entries(usbNotifications)) {
+      const { message, timestamp } = notification;
+
+      const usbNotificationElement = document.createElement("div");
+      usbNotificationElement.classList.add("notification", "usb-notification");
+
+      const messageElement = document.createElement("p");
+      messageElement.innerText = "USB Alert: " + message;
+      usbNotificationElement.appendChild(messageElement);
+
+      const timestampElement = document.createElement("p");
+      timestampElement.innerText = "Time: " + timestamp;
+      usbNotificationElement.appendChild(timestampElement);
+
+      sidebar.appendChild(usbNotificationElement);
+    }
+  }, (error) => {
+    console.log("Error getting USB notification messages:", error);
   });
 }
 
-// Call the function to retrieve and display all warning messages on page load
-document.addEventListener("DOMContentLoaded", function () {
-  displayWarningMessages();
-});
+document.addEventListener("DOMContentLoaded", displayWarningMessages);
+
+
 
 // Get a reference to the database service
 var database = firebase.database();

@@ -7,6 +7,10 @@
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/addash.css')  }}">
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+
 	<script src="https://kit.fontawesome.com/742298f6f6.js" crossorigin="anonymous"></script>
 	
 	    <style>
@@ -47,9 +51,14 @@
             font-size: 14px; /* Set font size */
         }
     
-
+        .notification.usb-notification {
+			/* Styles for USB alert notifications */
+			background-color: #71aff7;
+			color: #0056b3;
+			font-weight: bold;
+			}
         
-    
+        
     </style>
 
 </head>
@@ -110,12 +119,55 @@
 				</div>
 			</div>
 			<div id="ScreenMonitoring" class="tabcontent">
-				<h3>Screen Monitoring</h3>
-				<p>Client: {{ client_name }}</p>
-				<img src="{{ url_for('video_feed') }}" width="400" height="300" />
-				<p>Server IP: {{ host }}</p>
+				
+				<div class="video-container">
+					<style>
+						
+						.video-container {
+						  display: grid;
+						  grid-template-columns: repeat(2, 1fr);
+						  grid-gap: 10px;
+						  margin-top: 10px;
+						  
+						}
+						.video-container .video-frame {
+						  margin-bottom: 20px;
+						  flex-grow: 1; /* Allow the video-frame to grow */
+						}
+					  </style>
+				  
+					{% for client in clients %}
+					  <div class="video-frame">
+						<a href="#video-popup-{{ client.id }}" class="popup-video">
+							<img src="{{ url_for('video_feed', client_id=client.id) }}" width="300" height="200" />
+							<div id="video-popup-{{ client.id }}" class="mfp-hide" style="max-width: 100vw; max-height: 100vh;">
+							  <img src="{{ url_for('video_feed', client_id=client.id) }}" style="width: 100%; height: 100%;" />
+							</div>
+						  </a>
+						<p>Client: {{ client.name }}</p>
+					  </div>
+					{% endfor %}
+				  </div>
+				 <p>Server IP: {{ host }}</p>
 				<p>Server Port: {{ port }}</p>			
-					
+				<script>
+					$(document).ready(function() {
+					  $('.popup-video').magnificPopup({
+						type: 'inline',
+						mainClass: 'mfp-fade',
+						removalDelay: 160,
+						preloader: false,
+						fixedContentPos: false,
+						callbacks: {
+						  open: function() {
+							$('.mfp-wrap').css({ 'width': '70%', 'height': '70%' });
+							$('.mfp-content').css({ 'width': '70%', 'height': '70%' });
+						  }
+						}
+					  });
+					});
+				  </script>
+					  
 			</div>
 		</main>
 		<div id="wrapper">
